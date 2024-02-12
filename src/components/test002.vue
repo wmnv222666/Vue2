@@ -4,13 +4,16 @@
       <!-- 左侧-content -->
       <div style="margin-right: 15px">
         <h1 align="left">Employee setting</h1>
-        <!-- 搜索条件 -->
+        <!-- 搜索条件 clearable搜索框里面的X清除@keyup.enter.native="searchEmployee"回车键-->
         <el-row type="flex" class="row-bg">
           <el-input
             v-model="search"
             style="width: 100%"
-            placeholder="请输入员工序号" @change@="searchHandler('1')"
-          >
+            placeholder="请输入员工序号" 
+            clearable
+           @keyup.enter.native="searchEmployee"
+
+          ><!--  @keyup="searchHandler('1')"不行          @change@="searchHandler('1')"-->
           </el-input>
           <el-button
             type="primary"
@@ -19,7 +22,7 @@
             >search</el-button
           >
         </el-row>
-        <!-- 表格部分 -->
+        <!-- 表格部分 :row-key="id"-->
         <el-table
           :data="leftDataTable"
           height="450"
@@ -34,10 +37,10 @@
             prop="selection"
             label="selection"
             type="selection"
-            width="100"
-          >
+            min-width="10%"
+          ><!--min-width="10%"-->
           </el-table-column>
-          <el-table-column key="aa" prop="aa" label="序号" width="100">
+          <el-table-column key="aa" prop="aa" label="序号" width="100"><!--props传值    ref操作DOM-->
           </el-table-column>
           <el-table-column key="date" prop="date" label="日期" width="100">
           </el-table-column>
@@ -128,6 +131,7 @@ export default {
   mounted() {
     /**
      * !如果点击搜索时不改变初始选中状态，则注释掉347行即可
+     mounted是vue中的一个钩子函数，一般在初始化页面完成后，再对dom节点进行相关操作。
      */
     this.getInitLeftData(); // 初始化请求接口-左侧
     this.getInitRightData(); // 初始化请求接口-右侧
@@ -348,8 +352,8 @@ export default {
       if (indexArr.length) {
         // 勾选中
         indexArr.forEach((i) => {
-          /*this.$refs[key].toggleRowSelection(arr[i], true);*/
-          this.$refs[key].setCurrentRow(arr[i]);
+          /*this.$refs[key].toggleRowSelection(arr[i], true);*///如果不注销被选中还是会打勾
+          this.$refs[key].setCurrentRow(arr[i]);//选中的颜色
         });
         this.toLocateScroll(key, indexArr[0]); // 定位到指定位置
       } else {
@@ -361,11 +365,11 @@ export default {
     },
     // 恢复初始化状态
     resetStatus(arr, refKey) {
-      if (Array.isArray(arr) && arr.length) {
-        arr.forEach((item, index) => {
-          /*this.$refs[refKey].toggleRowSelection(arr[index], false);去掉就不会把之前的对选购 */ 
-        });
-      }
+      //if (Array.isArray(arr) && arr.length) {
+       // arr.forEach((item, index) => {
+          /*this.$refs[refKey].toggleRowSelection(arr[index], false);//不去掉就不会把之前的对选购 */ 
+       // });
+      //}
     },
     /**
      * @param {*} value 搜索条件
